@@ -1,0 +1,12 @@
+// Trigger runs getLocation() on Contacts with no Geolocation
+trigger SetGeolocationContacts on Contact (after insert, after update) {
+    for (Contact a : trigger.new){
+        if(Trigger.isUpdate){
+            if(a.MailingStreet != Trigger.oldMap.get(a.id).MailingStreet || a.MailingCity != Trigger.oldMap.get(a.id).MailingCity || a.MailingPostalCode != Trigger.oldMap.get(a.id).MailingPostalCode){
+                LocationCalloutsContacts.getLocation(a.id);
+            }
+        }
+        if (a.Location__Latitude__s == null)
+            LocationCalloutsContacts.getLocation(a.id);
+}
+}
